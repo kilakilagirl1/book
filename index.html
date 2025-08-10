@@ -1,0 +1,140 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function filledCell(cell) {
+          return cell !== '' && cell != null;
+        }
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row => row.some(filledCell));
+
+                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+                var headerRowIndex = filteredData.findIndex((row, index) =>
+                  row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
+                );
+                // Fallback
+                if (headerRowIndex === -1 || headerRowIndex > 25) {
+                  headerRowIndex = 0;
+                }
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Store - The Boyfriend Destroyer </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .container {
+      max-width: 800px;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      gap: 20px;
+    }
+    .book-image img {
+      max-width: 200px;
+      border-radius: 5px;
+    }
+    .book-details {
+      flex: 1;
+    }
+    .book-details h1 {
+      margin: 0 0 10px;
+      font-size: 24px;
+      color: #333;
+    }
+    .book-details p {
+      margin: 10px 0;
+      color: #666;
+    }
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+      margin: 10px 0;
+    }
+    .buy-button {
+      background-color: #28a745;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .buy-button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="book-image">
+      <img src="https://via.placeholder.com/200x300.png?text=Book+Cover" alt="Book Cover">
+    </div>
+    <div class="book-details">
+      <h1>The Boyfriend Destroyer </h1>
+      <p><strong>Author:</strong> Uncle Cheung</p>
+      <p><strong>Genre:</strong> NonFiction</p>
+      <p><strong>Description:</strong>
+- How to secretly make a woman love her boyfriend less
+- How to identify the boyfriend “enemy" and exploit his weaknesses
+- How to overcome the biggest objection that attached women give
+- Johan Ingram's method to make a woman feel emotionally dependent on you
+- A "future projection" technique to use when a woman tells you she is attached
+- Creating the illusion that you're the better man to increase a woman’s love for you
+- How to use the Vanishing Anchor to overcome the "I Have A Boyfriend" objection
+- A technique used to control a woman's feelings and make her obey your commands
+- The Lightning Rapport Builder technique to build emotional connections with a woman
+- "The Annihilator" technique to make a woman associate bad feelings with her boyfriend
+- Rick Cage's routine for seducing an attached women with verbal and non-verbal communication
+- Derek Rake's version of the Boyfriend Destroyer built on his "SeductionOnSteroids" philosophy
+- A technique by Rick Rudder to make a woman compare her boyfriend with an illusory "perfect man"
+- Using extreme polarity to convince a woman that her boyfriend is unworthy and you are the replacement</p>
+      <p class="price">$9.99</p>
+      <button class="buy-button" onclick="buyBook()">Buy Now</button>
+    </div>
+  </div>
+
+  <script>
+    function buyBook() {
+      alert('Thank you for your purchase! You will be redirected to the payment page.');
+      // In a real application, this would redirect to a payment gateway
+       window.location.href = 'https://www.youtube.com/watch?v=g9troT2ll_0&list=RDg9troT2ll_0&start_radio=1';
+    }
+  </script>
+</body>
+</html>
